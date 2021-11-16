@@ -2,23 +2,28 @@ const Sequelize = require('sequelize')
 
 const databaseName = process.env.DB_NAME || 'zhaul'
 
-let db
+let config
 
 if (process.env.DATABASE_URL) {
-  db = new Sequelize(process.env.DATABASE_URL, { logging: false })
+  config = {
+    logging: false,
+    ssl: true,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  }
 } else {
-  db = new Sequelize(
-    process.env.DATABASE,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
-    {
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      dialect: 'postgres',
-      logging: false,
-      ssl: true,
-    }
-  )
+  config = {
+    logging: false,
+  }
 }
+
+const db = new Sequelize(
+  process.env.DATABASE_URL || `postgres://localhost:5432/${databaseName}`,
+  config
+)
 
 module.exports = db
