@@ -6,9 +6,10 @@ router.post('/create-payment-intent', async (req, res) => {
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount:
+    amount: (
       (Number(Number(items.price) * 100) * (new Date(end) - new Date(start))) /
-      (1000 * 60 * 60 * 24),
+      (1000 * 60 * 60 * 24)
+    ).toFixed(0),
     currency: 'usd',
     payment_method_types: ['card'],
   })
