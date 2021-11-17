@@ -50,7 +50,7 @@ router.get('/history', async (req, res, next) => {
       where: { userId: req.user.id },
       include: Truck,
     })
-    return res.json(reservations.sort((a, b) => a.createdAt - b.createdAt))
+    return res.json(reservations.sort((a, b) => b.createdAt - a.createdAt))
   } catch (error) {
     console.error(error.message)
     next(error)
